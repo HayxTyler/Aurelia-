@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aurelia by Pretty Gold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#FAF7F0;
+    --champagne:#EFE8D8;
+    --black:#1C1A16;
+    --gold:#B8935F;
+    --gold-bright:#D9BC85;
+    --gold-line: rgba(184,147,95,0.35);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ivory);
+    color:var(--black);
+    font-family:'Jost',sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.serif{
+    font-family:'Fraunces', serif;
+    font-weight:400;
+    letter-spacing:0.01em;
+  }
+  .eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:400;
+  }
+  a{color:inherit;text-decoration:none;}
+
+  /* ---- Gold seam (signature element) ---- */
+  #seam{
+    position:fixed;
+    top:0; left:28px;
+    width:1px;
+    height:100vh;
+    background:var(--gold-line);
+    z-index:5;
+  }
+  #seam-fill{
+    position:absolute;
+    top:0; left:0;
+    width:1px;
+    height:0%;
+    background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+    transition:height 0.1s linear;
+  }
+  .tick{
+    position:absolute;
+    left:-3px;
+    width:7px;
+    height:1px;
+    background:var(--gold);
+    opacity:0.6;
+  }
+  @media (max-width: 720px){
+    #seam{left:14px;}
+  }
+
+  /* ---- Nav ---- */
+  nav{
+    position:fixed; top:0; left:0; right:0;
+    display:flex; justify-content:space-between; align-items:center;
+    padding:28px 56px 28px 64px;
+    z-index:10;
+    mix-blend-mode:difference;
+    color:var(--ivory);
+  }
+  nav .brand{font-family:'Fraunces',serif; font-size:1.1rem; letter-spacing:0.05em;}
+  nav ul{list-style:none; display:flex; gap:36px;}
+  nav a{font-size:0.75rem; letter-spacing:0.18em; text-transform:uppercase;}
+  @media (max-width: 720px){
+    nav{padding:22px 24px 22px 36px;}
+    nav ul{gap:18px;}
+    nav ul li:nth-child(n+3){display:none;}
+  }
+
+  section{
+    position:relative;
+    padding:0 56px 0 96px;
+  }
+  @media (max-width: 720px){
+    section{padding:0 24px 0 48px;}
+  }
+
+  /* ---- Hero ---- */
+  #hero{
+    height:100vh;
+    display:flex; flex-direction:column; justify-content:center;
+    background:var(--black);
+    color:var(--ivory);
+    padding-left:96px;
+  }
+  #hero .eyebrow{color:var(--gold-bright); margin-bottom:22px;}
+  #hero h1{
+    font-size:clamp(3.2rem, 9vw, 8.5rem);
+    line-height:0.95;
+    font-weight:300;
+  }
+  #hero h1 em{
+    font-style:italic;
+    font-weight:400;
+    color:var(--gold-bright);
+  }
+  #hero p.tag{
+    margin-top:28px;
+    max-width:420px;
+    font-size:0.95rem;
+    line-height:1.7;
+    color:rgba(250,247,240,0.7);
+  }
+  .scroll-cue{
+    position:absolute; bottom:48px; left:96px;
+    font-size:0.7rem; letter-spacing:0.2em; text-transform:uppercase;
+    color:rgba(250,247,240,0.5);
+    display:flex; align-items:center; gap:10px;
+  }
+  .scroll-cue .line{width:32px;height:1px;background:var(--gold-bright);}
+
+  /* ---- Manifesto ---- */
+  #manifesto{
+    padding-top:160px; padding-bottom:160px;
+    max-width:900px;
+  }
+  #manifesto h2{
+    font-size:clamp(1.6rem, 3.4vw, 2.6rem);
+    font-weight:300;
+    line-height:1.5;
+  }
+  #manifesto h2 em{color:var(--gold); font-style:italic;}
+
+  /* ---- Collections ---- */
+  #collections{padding-top:80px; padding-bottom:80px;}
+  .col-head{margin-bottom:64px;}
+  .col-head h2{font-size:clamp(2rem,4vw,3rem); font-weight:300;}
+
+  .piece{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:48px;
+    align-items:center;
+    padding:64px 0;
+    border-top:1px solid var(--gold-line);
+  }
+  .piece:last-child{border-bottom:1px solid var(--gold-line);}
+  .piece:nth-child(even){grid-template-columns:1.1fr 0.9fr;}
+  .piece:nth-child(even) .piece-visual{order:2;}
+  .piece:nth-child(even) .piece-copy{order:1;}
+
+  .piece-visual{
+    aspect-ratio:4/5;
+    border-radius:2px;
+    position:relative;
+    overflow:hidden;
+  }
+  .piece-visual::after{
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(160deg, rgba(255,255,255,0.15), rgba(0,0,0,0) 60%);
+  }
+  .v-clothing{background:
+      radial-gradient(circle at 30% 20%, rgba(217,188,133,0.5), transparent 60%),
+      linear-gradient(135deg, #2a2620, #1C1A16 70%);}
+  .v-shoes{background:
+      radial-gradient(circle at 70% 80%, rgba(217,188,133,0.45), transparent 55%),
+      linear-gradient(200deg, #EFE8D8, #cbbd9c 80%);}
+  .v-bags{background:
+      radial-gradient(circle at 50% 30%, rgba(184,147,95,0.55), transparent 60%),
+      linear-gradient(160deg, #1C1A16, #3a3226 75%);}
+  .v-perfume{background:
+      radial-gradient(circle at 40% 60%, rgba(217,188,133,0.6), transparent 55%),
+      linear-gradient(145deg, #FAF7F0, #d8c9a3 85%);}
+
+  .piece-num{
+    position:absolute; top:20px;
+    font-family:'Fraunces',serif; font-style:italic;
+    font-size:0.85rem;
+    color:var(--gold-bright);
+  }
+  .piece:nth-child(odd) .piece-num{left:20px;}
+  .piece:nth-child(even) .piece-num{right:20px;}
+
+  .piece-copy .eyebrow{margin-bottom:14px;}
+  .piece-copy h3{font-size:clamp(1.8rem,3vw,2.6rem); font-weight:400; margin-bottom:18px;}
+  .piece-copy p{font-size:0.95rem; line-height:1.75; color:#4a463d; max-width:400px;}
+  .piece-copy .shop-link{
+    display:inline-block; margin-top:24px;
+    font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase;
+    color:var(--gold);
+    border-bottom:1px solid var(--gold);
+    padding-bottom:4px;
+  }
+
+  @media (max-width: 860px){
+    .piece, .piece:nth-child(even){grid-template-columns:1fr; gap:24px;}
+    .piece:nth-child(even) .piece-visual, .piece:nth-child(even) .piece-copy{order:unset;}
+  }
+
+  /* ---- Craft strip ---- */
+  #craft{
+    background:var(--black);
+    color:var(--ivory);
+    padding:140px 56px 140px 96px;
+    margin-top:80px;
+  }
+  #craft .eyebrow{color:var(--gold-bright);}
+  #craft h2{
+    font-size:clamp(2rem,4.5vw,3.4rem);
+    font-weight:300;
+    max-width:760px;
+    margin-top:24px;
+    line-height:1.3;
+  }
+  #craft h2 em{font-style:italic; color:var(--gold-bright);}
+  .thread-anim{
+    margin-top:56px;
+    width:100%;
+    max-width:520px;
+    height:1px;
+    background:var(--gold-line);
+    position:relative;
+    overflow:hidden;
+  }
+  .thread-anim span{
+    position:absolute; top:0; left:-40%;
+    width:40%; height:100%;
+    background:linear-gradient(90deg, transparent, var(--gold-bright), transparent);
+    animation:thread 3.2s ease-in-out infinite;
+  }
+  @keyframes thread{
+    0%{left:-40%;} 100%{left:100%;}
+  }
+
+  /* ---- Footer / CTA ---- */
+  #cta{
+    padding:160px 56px 100px 96px;
+    text-align:left;
+  }
+  #cta h2{
+    font-size:clamp(2.4rem,6vw,5rem);
+    font-weight:300;
+    max-width:760px;
+  }
+  #cta h2 em{font-style:italic; color:var(--gold);}
+  #cta .shop-btn{
+    display:inline-block; margin-top:40px;
+    padding:16px 38px;
+    border:1px solid var(--black);
+    font-size:0.75rem; letter-spacing:0.22em; text-transform:uppercase;
+    transition:all 0.3s ease;
+  }
+  #cta .shop-btn:hover{
+    background:var(--black); color:var(--gold-bright);
+  }
+
+  footer{
+    padding:48px 56px 48px 96px;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--gold-line);
+    font-size:0.75rem; letter-spacing:0.12em; color:#7a7568;
+  }
+  footer .fbrand{font-family:'Fraunces',serif; font-style:italic; color:var(--gold);}
+  @media (max-width:720px){
+    #craft, #cta, footer{padding-left:48px; padding-right:24px;}
+    footer{flex-direction:column; gap:12px; text-align:center;}
+  }
+
+  .reveal{
+    opacity:0; transform:translateY(24px);
+    transition:opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.in{opacity:1; transform:translateY(0);}
+</style>
+</head>
+<body>
+
+<div id="seam"><div id="seam-fill"></div></div>
+
+<nav>
+  <div class="brand">AURELIA</div>
+  <ul>
+    <li><a href="#collections">Collections</a></li>
+    <li><a href="#craft">Craft</a></li>
+    <li><a href="#cta">Shop</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <p class="eyebrow">Pretty Gold — Est. Lagos</p>
+  <h1>Worn in<br><em>gold light.</em></h1>
+  <p class="tag">Clothing, shoes, bags and perfume, finished the way a seam is finished — quietly, and by hand.</p>
+  <div class="scroll-cue"><span class="line"></span> Scroll</div>
+</section>
+
+<section id="manifesto">
+  <p class="eyebrow reveal">Our Word</p>
+  <h2 class="reveal" style="margin-top:20px;">Aurelia was not built to be loud. It was built the way a tailor builds — one seam, one finish, one detail at a time, until the whole thing catches the light <em>on its own.</em> This is not a trend. It is a standard.</h2>
+</section>
+
+<section id="collections">
+  <div class="col-head reveal">
+    <p class="eyebrow">The Collection</p>
+    <h2>Four disciplines,<br>one gold thread.</h2>
+  </div>
+
+  <div class="piece reveal">
+    <div class="piece-visual v-clothing"><span class="piece-num">01</span></div>
+    <div class="piece-copy">
+      <p class="eyebrow">Clothing</p>
+      <h3>Structured, never stiff.</h3>
+      <p>Tailoring cut close to the body and finished in gold thread at every hem — pieces built to move the way you do, not the way a rack does.</p>
+      <a class="shop-link" href="#cta">View Clothing</a>
+    </div>
+  </div>
+
+  <div class="piece reveal">
+    <div class="piece-visual v-shoes"><span class="piece-num">02</span></div>
+    <div class="piece-copy">
+      <p class="eyebrow">Shoes</p>
+      <h3>The last word, first.</h3>
+      <p>Every pair opens the room before you say a thing. Gold hardware, hand-finished leather, soles built for pavement and for entrances.</p>
+      <a class="shop-link" href="#cta">View Shoes</a>
+    </div>
+  </div>
+
+  <div class="piece reveal">
+    <div class="piece-visual v-bags"><span class="piece-num">03</span></div>
+    <div class="piece-copy">
+      <p class="eyebrow">Bags</p>
+      <h3>Carried, not shown off.</h3>
+      <p>Clean hardware, no logos shouting from across the room. The gold clasp is the only signature it needs.</p>
+      <a class="shop-link" href="#cta">View Bags</a>
+    </div>
+  </div>
+
+  <div class="piece reveal">
+    <div class="piece-visual v-perfume"><span class="piece-num">04</span></div>
+    <div class="piece-copy">
+      <p class="eyebrow">Perfume</p>
+      <h3>The part they remember.</h3>
+      <p>A warm gold amber base, worn close to skin. Long after you've left a room, Aurelia is still the reason it's remembered.</p>
+      <a class="shop-link" href="#cta">View Perfume</a>
+    </div>
+  </div>
+</section>
+
+<section id="craft">
+  <p class="eyebrow reveal">Behind the Gold</p>
+  <h2 class="reveal">Every piece passes through one hand before it reaches yours. That is <em>the seam</em> Aurelia is named for.</h2>
+  <div class="thread-anim"><span></span></div>
+</section>
+
+<section id="cta">
+  <p class="eyebrow reveal">Pretty Gold</p>
+  <h2 class="reveal">Wear the <em>standard.</em></h2>
+  <a class="shop-btn reveal" href="#">Shop the Collection</a>
+</section>
+
+<footer>
+  <div class="fbrand">Aurelia</div>
+  <div>Clothes · Shoes · Bags · Perfume</div>
+  <div>© 2026 Pretty Gold</div>
+</footer>
+
+<script>
+  // Gold seam scroll progress
+  const seamFill = document.getElementById('seam-fill');
+  const seam = document.getElementById('seam');
+
+  // Tick marks at each section
+  const sections = document.querySelectorAll('section');
+  sections.forEach(sec=>{
+    const tick = document.createElement('div');
+    tick.className='tick';
+  });
+
+  function updateSeam(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const pct = Math.min(100, (scrollTop/docHeight)*100);
+    seamFill.style.height = pct + '%';
+  }
+  window.addEventListener('scroll', updateSeam);
+  updateSeam();
+
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, {threshold:0.15});
+  revealEls.forEach(el=>io.observe(el));
+</script>
+
+</body>
+</html>
